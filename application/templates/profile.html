@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% extends "base_template.html" %}
+
+{% block title %}Profile - Unbugger{% endblock title %}
+
+{% block top-nav %}
+{% with "profile" as whichactive %}
+    {% include "topnav_template.html" with active=whichactive %}
+{% endwith %}
+{% endblock top-nav %}
+
+{% block content %}
+{% load staticfiles %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 style="display: inline-block;">{{profileuser.user.username}}'s profile</h1>
+            {% if appuser %}
+            {% ifequal profileuser.user.username appuser.user.username %}
+            <form action = "/eprofile"  style="float:right;">
+            <button type="submit" class="btn btn-lg btn-default">Edit Profile</button>
+            </form>
+            {% else %}
+            <form action = "/follow_user"  style="float:right;">
+            <input type="hidden" name="target_id" value="{{profileuser.user.id}}"> 
+            <button type="submit" class="btn btn-lg btn-default">Follow</button>
+            </form>
+            {% endifequal %}
+            {% endif %}
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-3">
+                {% if profileuser.picture %}
+                <img style="width:100%;" src="{{profileuser.picture.url}}"> 
+                {% else %}
+                <img style="width:100%;" src="{% static "images/profile.jpg" %}"> 
+                {% endif %}
+                <h1 style="font-size:400%; text-align: center;">
+                    Points
+                    <span class="points" style="font-size: 200%; vertical-align:middle; line-height: .7;">{{profileuser.points}}</span>
+                </h1>
+            </div>
+            
+            <div class="col-sm-4">
+                <h2 style="display: inline; padding-top: 2em;">Reputation:</h2> <h2 style="display: inline; color: {% if 0 < profileuser.get_reputation %}green{% elif 0 > profileuser.get_reputation %}red{% else %}gray{% endif %};">
+{% if 0 < profileuser.get_reputation %}+{% elif 0 > profileuser.get_reputation %}{% else %}&plusmn;{% endif %}{{profileuser.get_reputation}}
+                </h2>
+                <h2>Education:</h2>
+                {% if profileuser.education %}
+                <ul style="font-size: 150%;">
+                    <li>{{profileuser.education}}</li>
+                </ul>
+                {% else %}
+                <ul style="font-size: 150%;">
+                    <li>None.</li>
+                </ul>
+                {% endif %}
+
+            </div>
+            
+            <div class="col-sm-5">
+                <h2>Career</h2>
+                {% if profileuser.career %}
+                <ul style="font-size: 150%;">
+                    <li>{{profileuser.career}}</li>
+                </ul>
+                {% else %}
+                <ul style="font-size: 150%;">
+                    <li>None.</li>
+                </ul>
+                {% endif %}
+
+                <h2>Expertise:</h2>
+                {% if tags %}
+                {% for tag in tags %}
+                <button type="button" class="btn btn-xs btn-danger">{{tag.text}}</button>
+                {% endfor %}
+                {% else %}
+                <ul style="font-size: 150%;">
+                    <li>None.</li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        <h4>{% ifequal profileuser.user.username appuser.user.username %}My{% else %}{{profileuser.user.username}}'s{% endifequal %} recent requests</h4>
+        <div style="margin-left: 0.5em; margin-right: 0.5em;">
+        {% for request in request_list %}
+            {% include "request_summary_template.html" with request=request %}
+        {% endfor %}
+        {% if not request_list %}
+        <h5>No requests found.</h5> 
+        {% endif %}
+        </div>
+        <h4>{% ifequal profileuser.user.username appuser.user.username %}My{% else %}{{profileuser.user.username}}'s{% endifequal %} recent responses</h4>
+        <div style="margin-left: 0.5em; margin-right: 0.5em;">
+        {% for request in response_list %}
+            {% include "request_summary_template.html" with request=request %}
+        {% endfor %}
+        {% if not response_list %}
+        <h5>No responses found.</h5>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

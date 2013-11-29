@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+
+<div>
+    <form enctype="multipart/form-data" action="{% url 'new_request' %}" method="POST">
+		{{form}}
+        <button type='submit'>submit</button>
+        {% csrf_token %}
+    </form>
+</div>

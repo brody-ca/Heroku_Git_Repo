@@ -1,0 +1,63 @@
+<!-- topnav -->
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!--
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+      </button>
+      -->
+      <a class="navbar-brand" href="/">Unbugger</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="{% if active == "home" %}active{% endif %}"><a href="/">Home</a></li>
+        {% if appuser != None %}
+        <!-- not yet implemented
+        <li class="{% if active == "follows" %}active{% endif %}"><a href="/follows">Follows</a></li>
+        -->
+        <!--
+        <li class="{% if active == "profile" %}active{% endif %}"><a href="/profile">My Profile</a></li>
+        -->
+        <li class="{% if active == "myrequests" %}active{% endif %}"><a href="/my_requests">My Requests</a></li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if appuser == None %}
+            <li><a href="#" data-toggle="modal" data-target="#myModal">Log in/Register</a></li>
+        {% else %}
+            <li>Welcome, <a href="/profile" style="display: inline-block; padding-left: 0; padding-right: 0;"><b>{{appuser.user.username}}</b></a>! <a href="/logout" style="display: inline-block; padding-left: 0;">Log out</a></li>
+        {% endif %}
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+{% if appuser == None %}
+<!-- Login modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!--
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Log in</h4>
+      </div>
+      -->
+    
+      <div class="modal-body">
+      
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="position: absolute; top: 0.5em; right: 0.5em; z-index: 500">&times;</button>
+        {% include "login_popup_template.html" %}
+      </div>
+        <!--
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+        -->
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endif %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<div class="container">
+<div class="row">
+    <div class="col-md-6" style="vertical-align: middle; height: 100%;">
+        <form method="post" class="form-signin" action="/login">
+            <h2 class="" style="text-align: center;">
+                Log in
+            </h2>
+            {% if form.errors %}
+            <p style="color:red; text-align: center;">
+            Incorrect user name or password.
+            </p>
+            {% else %}
+            {% endif %}
+            <input id="id_username" type="text" class="form-control" placeholder="Username" autofocus="" name="username">
+            <input id="id_password" type="password" class="form-control" placeholder="Password" name="password">
+            <button class="btn btn-lg btn-primary btn-block" type="submit" b="" value="Login">Sign in</button>
+            <input type="hidden" name="next" value="{{next}}" />
+
+            {% csrf_token %}
+        </form>
+        <a href="password_reset">Forgot password?</a>
+    </div>
+
+    <div class="col-md-6" style="border-left: 1px solid rgb(229, 229, 229);">
+        <h2 style="text-align: center;">Register</h2>
+        <form method="post" class="form-signin" action="/register">
+            {% for error in errors %}
+            <p style="color: red; text-align: center;">
+            {{ error }}
+            </p>
+            {% endfor %}
+            <input type="text" class="form-control" name="username" placeholder="Username" value="{{username}}"></td>
+            <input type="text" class="form-control" name="email" placeholder="Email" value="{{email}}"></td>
+            <input type="password" class="form-control" placeholder="Password" name="password1"></td>
+            <input type="password" class="form-control" placeholder="Confirm Password" name="password2"></td>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit" b="" value="Register">Register</button>
+            {% csrf_token %}
+        </form>
+    </div>
+</div> <!-- /row -->
+</div> <!-- /container -->

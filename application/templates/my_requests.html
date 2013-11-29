@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% extends "base_template.html" %}
+
+{% block title %}My Requests - Unbugger{% endblock title %}
+
+{% block top-nav %}
+{% with "myrequests" as whichactive %}
+    {% include "topnav_template.html" with active=whichactive %}
+{% endwith %}
+{% endblock top-nav %}
+
+{% block content %}
+    <h1>My previous requests:</h1>
+    <br />
+    {% if not request_list %}
+        No requests found.
+    {% endif %}
+    {% for request in request_list %}
+        {% include "request_summary_template.html" with request=request %}
+    {% endfor %}
+    
+    <br />
+    <br />
+    <a href="/new_request">Submit a new request.</a>
+{% endblock content %}

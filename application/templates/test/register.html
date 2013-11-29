@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% extends "base_template.html" %}
+{% block body %}
+    <div class="container">
+    
+    <div class="container" style="width: 25em;">
+      <form method="post" class="form-signin" action="">
+        <h1 class="form-signin-heading" style="text-align: center;">
+          Log in to Unbugger
+        </h1>
+		&nbsp;
+		<input id="id_username" type="text" class="form-control" placeholder="Username" autofocus="" name="username">
+		<input id="id_password" type="password" class="form-control" placeholder="Password" name="password">
+		<button class="btn btn-lg btn-primary btn-block" type="submit" b="" value="Login">Sign in</button>
+		<input type="hidden" name="next" value="{{next}}" />
+		
+		{% csrf_token %}
+      </form>
+	  <a href="">Forgot password?</a>
+	  
+	  <h2 style="text-align: center;">or register:</h2>
+      <form method="post" class="form-signin" action="">
+	  
+<!--        <input type="text" class="form-control" name="username" placeholder="Username" value="{{username}}">
+        <input type="text" class="form-control" name="email" placeholder="Email" value="{{email}}">
+        <input type="password" class="form-control" placeholder="Password" name="password1">
+        <input type="password" class="form-control" placeholder="Confirm Password" name="password2">-->
+        {% for field in form.visible_fields %}
+        {{field}}{{field.errors}}
+        {% endfor %}
+        <button class="btn btn-lg btn-primary btn-block" type="submit" b="" value="Register">Register</button>
+        {% csrf_token %}
+      </form>
+        <h3 style="padding-top: 10em;">This page will be gone by sprint 1. Instead, this form will pop up in the center of the page whenever the login/register link is clicked.</h3>
+    </div>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+  </body>
+{% endblock body %}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+{% extends "base_template.html" %}
+
+{% block title %}Viewing Request - Unbugger{% endblock title %}
+
+{% block top-nav %}
+{% with "home" as whichactive %}
+    {% include "topnav_template.html" with active=whichactive %}
+{% endwith %}
+{% endblock top-nav %}
+        
+{% block content %}
+
+<div class="row">
+    <div class="col-md-9">
+    
+        <!-- Question section -->
+    
+        <div class="page-header request-header" style="margin-top: 0px;">
+            <h1 style="display: inline;">{{ request.name }}</h1>
+            <div style="display: inline-block; float: right;">
+                <h2 class="quality-lg" style="display: inline; float: right;">
+                    <a href="{% url 'dislike_request' request.id %}">&#8722;</a> {{ request.vote_count }}  <a href="{% url 'like_request' request.id %}">+</a>
+                </h2>
+            </div>
+        </div>
+        <div class="request-question" style="white-space: pre-line;">{{ request.details }}
+        </div>
+        
+        {% if request.picture %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Attached images</h3>
+            </div>
+            <div class="panel-body">
+                <img style="width:100%;" src="{{request.picture.url}}">
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- attached files section -->
+        {% if false %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Attached files</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>file.c</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        <div style="text-align: right; margin-right: .5em; font-style: italic; margin-top: 1em;">Posted by <a href="profile?id={{request.user.id}}">{{ request.user.user.username }}</a> at  {{ request.date }}</div>
+        <!-- Responses section -->
+        
+        <h3 style="padding-bottom: 0.5em; border-bottom: 1px solid #eeeeee; margin-top: 2em;">Responses <a type="button" class="btn btn-xl btn-danger" href="/new_response?id={{request.id}}" method='GET' style="float: right;">Make a response!</a></h3>
+        <div class="response-collection" style="margin-bottom: 5em; margin-left: 2em;">
+            <!-- 
+            <div class="request-response-chosen">
+                <h2>Accepted response:</h2>
+                <p>You should do this.</p>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Attached files</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <li>file.c</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="request-header" style="margin-top: 0px;">
+                    <div style="width: 100%; float: right;">
+                        <div style="text-align: right;">Posted by BobTwo at 7:00:00 PM <b>(+123)</b></div>
+                    </div>
+                </div>
+            </div>
+            -->
+            
+            <!-- other responses section (put a for here) -->
+            <!--
+            <div style="margin-top: 6em;" class="other-response-collection">
+                <h3 style="margin-bottom: 1em;">Other responses:</h3>
+                <div class="request-response">
+                <p>You should do this.</p>
+
+                    <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Attached files</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <li>filebad.c</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="request-header" style="margin-top: 0px;">
+                    <div style="display: inline-block; float: right;">
+                        <div style="text-align: right;">Posted by BobThree at 7:00:00 PM <b>(-9999)</b></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            
+            <div class="request-response-chosen">
+                <h2>Accepted response:</h2>
+                
+                {% for response in request.responses.all %}
+                {% if request.selected_id == response.id %}
+                <h4 style="display: inline-block;">{{ response.name }}</h4>
+                <div class="quality-sm" style="display: inline; position: relative; top: -0.05em; left: 1em;">
+                    <a href="{% url 'dislike_response' response.id %}">&#8722;</a> {{ response.vote_count }}  <a href="{% url 'like_response' response.id %}">+</a>
+                </div>
+                {% if response.picture %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Attached images</h3>
+                    </div>
+                    <div class="panel-body">
+                        <img style="width:100%;" src="{{response.picture.url}}">
+                    </div>
+                </div>
+                {% endif %}
+                <p style="white-space: pre-line;">{{ response.details }}</p>
+                
+                <div class="request-header" style="margin-top: 0px;">
+                    <div style="width: 100%; float: right;">
+                        <div style="text-align: right;">Posted by <a
+                        href="profile?id={{response.user.user.id}}">{{response.user.user.username}}</a> at {{ response.date }}</div>
+                    </div>
+                </div>
+                
+                <ul>
+                    {% for comment in response.comments.all %}
+                        <li> {{comment.text}}   by {{comment.user.user.username}}
+                    {% endfor %}
+                </ul>
+                
+                {% endif %}
+                {% endfor %}
+            </div>
+            
+            <div class="other-response-collection">
+                <h3>Other responses:</h3>
+                {% for response in request.responses.all %}
+                
+                {% if request.selected_id != response.id %}
+                <div style="margin-bottom: 3em;">
+                    <h4 style="display: inline-block;">{{ response.name }}</h4>
+                    <div class="quality-sm" style="display: inline; position: relative; top: -0.05em; left: 1em;">
+                        <a href="{% url 'dislike_response' response.id %}">&#8722;</a> {{ response.vote_count }}  <a href="{% url 'like_response' response.id %}">+</a>
+                    </div>
+                    {% if response.picture %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Attached images</h3>
+                        </div>
+                        <div class="panel-body">
+                            <img style="width:100%;" src="{{response.picture.url}}">
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if appuser == request.user and request.answered == False %}
+                        <form method='POST' action='/select_response' style="float: right; position: relative; top: .4em;">
+                            <input type='hidden' name='response_id' value={{response.id}}></input>
+                            <button class="btn btn-sm btn-danger" type='submit'>Select this answer</button>
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                    <hr style="margin-top: 0em; margin-bottom: 0.5em;" />
+                    <p style="white-space: pre-line;">{{ response.details }}</p>
+                    
+                    <div class="request-header" style="margin-top: 0px;">
+                        
+                        <div style="float: right;">
+                            <a href="new_comment?id={{response.id}}"> New Comment </a>
+                            <div style="text-align: right; display: inline; font-style: italic;">Posted by <a
+                            href="profile?id={{response.user.user.id}}">{{response.user.user.username}}</a> at {{ response.date }}</div>
+                        </div>
+                    </div>
+                    <hr style="opacity: 0;" />
+                    
+                    <ul>
+                    {% for comment in response.comments.all %}
+                        <li> {{comment.text}}   by {{comment.user.user.username}}
+                    {% endfor %}
+                    </ul>
+                        
+                
+                </div>
+                
+                {% endif %}
+                
+                {% endfor %}
+            </div><!-- end other response section -->
+        </div><!-- end response section -->
+    </div> <!-- end md9 -->
+
+    <!-- sidebar -->
+    <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked" style="text-align: center;">
+        {% include "search_template.html" %}        
+        <hr />
+        <li>
+        <h3 style="margin-bottom: 0px;">Bounty</h3>
+        <h1 style="font-size: 400%; margin: 0px;" class="points">{{request.reward}}</h1>
+        </li>
+        <h3>Tags</h3>
+        <li class="">
+        {% if request.tags.count < 1 %}
+            <button type="button" class="btn btn-xs btn-danger">Untagged!</button>
+        {% endif %}
+        {% for tag in request.tags.all %}
+            {% include "tagbutton_template.html" with tag=tag %}
+        {% endfor %}
+        </li>
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}

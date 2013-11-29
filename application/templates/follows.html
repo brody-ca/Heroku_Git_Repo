@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% extends "base_template.html" %}
+
+{% block title %}Followed Users - Unbugger{% endblock title %}
+
+{% block top-nav %}
+{% with "follows" as whichactive %}
+    {% include "topnav_template.html" with active=whichactive %}
+{% endwith %}
+{% endblock top-nav %}
+        
+{% block content %}
+    
+<div class="col-md-3">
+<!-- sidebar -->
+    <ul class="nav nav-pills nav-stacked list-group" style="text-align: center;">
+        <li class="list-group-item active"><a href="">Requests from BobOne</a></li>
+        <li class="list-group-item"><a href="">Requests from BobTwo</a></li>
+        <li class="list-group-item active"><a href="">Requests from Bob3</a></li>
+        <li class="list-group-item active"><a href="">Requests from Bob4</a></li>
+        <li class="list-group-item"><a href="">Requests from Bob5</a></li>
+            <form action="" method="get">
+                <input type="text" class="form-control" name="search" placeholder="Search">
+            </form>
+        </li>
+    </ul>
+</div>
+
+<div class="col-md-9" style="margin-bottom: 2em;">
+    {% include "request_summary_template.html" %}
+    {% include "request_summary_template.html" %}
+    {% include "request_summary_template.html" %}
+</div>
+
+{% endblock content %}

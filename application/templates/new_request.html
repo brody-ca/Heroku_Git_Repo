@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% extends "base_template.html" %}
+
+{% block title %}New Request - Unbugger{% endblock title %}
+
+{% block top-nav %}
+{% with "" as whichactive %}
+    {% include "topnav_template.html" with active=whichactive %}
+{% endwith %}
+{% endblock top-nav %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1>New request</h1>
+    </div>
+    {% for error in errors %}
+    <p style="color: red; text-align: center;">
+    {{ error }}
+    </p>
+    {% endfor %}
+    <div class="panel-body">
+        <form enctype="multipart/form-data" action="/new_request" method="POST">
+            <h4>Request name:</h4>
+            <input name='name' type="text" class="form-control" placeholder="Request name" autofocus="">
+            <br />
+            <h4>Request details:</h4>
+            <!-- todo: make the maxlength the same as the max in the model -->
+            <textarea name='details' class="form-control" style="width: 100%;margin-bottom: .5em;" placeholder="Request details" maxlength="10000"></textarea>
+            <br />
+            <h4>File upload:</h4>
+            <input name='picture' type="file" autofocus="">
+            <br />
+            <h4>Tags:</h4>
+            <input name='tags_string' type="text" class="form-control" placeholder="Tags (separated with spaces)" autofocus="">
+            <br />
+            <h4 style="display: inline;">Point award: </h4>
+            <input name='reward' type="text" class="form-control" placeholder="points" autofocus="">
+            <br />
+            <button type="submit" class="btn btn-lg btn-default">Submit!</button>
+            {% csrf_token %}
+       </form>
+    </div>
+</div>
+{% endblock content %}

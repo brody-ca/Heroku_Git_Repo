@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+{% extends "base_template.html" %}
+
+{% block title %}Viewing Request - Unbugger{% endblock title %}
+
+{% block top-nav %}
+{% with "home" as whichactive %}
+    {% include "topnav_template.html" with active=whichactive %}
+{% endwith %}
+{% endblock top-nav %}
+        
+{% block content %}
+
+<div class="row">
+    <div class="col-md-9">
+    
+        <!-- Question section -->
+    
+        <div class="page-header request-header" style="margin-top: 0px;">
+            <h1 style="display: inline;">{{ response.name }}</h1>
+            <div style="display: inline-block; float: right;">
+                <h2 class="quality-lg" style="display: inline; float: right;">
+                    <a>&#8722;</a> {{ response.votes.count }}  <a>+</a>
+                </h2>
+            </div>
+        </div>
+        <div class="request-question">
+            {{ response.details }}
+        </div>
+        <!-- attached files section -->
+        {% if false %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Attached files</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>file.c</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        <hr />
+        <div style="text-align: right; margin-right: .5em; font-style: italic;">Posted by {{ response.user.user.username }} at  {{ request.date }}</div>
+
+    <!-- New Comment form section -->
+    <div class="panel-body">
+        <form enctype="multipart/form-data" action="/new_comment" method="POST">
+            <h4>New comment:</h4>
+            <textarea name='text' class="form-control" style="width: 100%;margin-bottom: .5em;" placeholder="Comment text"></textarea>
+            <br />
+            <input type='hidden' name='req_id' value={{request.id}} > </input>
+            <input type='hidden' name='res_id' value={{response.id}} > </input>
+            <button type="submit" class="btn btn-lg btn-default">Submit!</button>
+            {% csrf_token %}
+       </form>
+    </div>
+</div>
+
+{% endblock content %}
+    
+    
+    
+    

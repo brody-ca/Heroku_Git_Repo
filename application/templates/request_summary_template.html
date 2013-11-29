@@ -1,0 +1,35 @@
+
+<div class="panel panel-default" style="margin-bottom:2em">
+    <div class="panel-heading" style="height: 4.1em;">
+        <h1 style="margin: 0px; padding: 0px; margin-right: .5em; display: inline-block; float: left; padding-right: .5em !important; border-right: 1px solid #ccc;" class="points">
+            {{ request.reward }}
+        </h1>
+        <a href="view_request?id={{request.id}}">
+            <h2 style="display: inline; line-height: 1.25;">
+                {{ request.name }}
+            </h2>
+        </a>
+        <h3 class="quality-md" style="display: inline; float: right; line-height: 1.6;">
+            <a href="{% url 'dislike_request' request.id %}">&#8722;</a> {{ request.vote_count }}  <a href="{% url 'like_request' request.id %}">+</a>
+        </h3>
+    </div>
+    <div class="post-content" style="padding: .4em;">
+        <div class="panel-body" style="padding: 0em; margin-bottom: .6em;">
+        <div style="white-space: pre-line; max-height: 4.5em; overflow: hidden;">{{ request.details|truncatechars:300 }}</div>
+        
+        <div style="margin-top: .9em;">
+            {% for tag in request.tags.all %}
+            {% include "tagbutton_template.html" with tag=tag %}
+            {% endfor %}
+        </div>
+        </div>
+        
+        <div style="float: left; color: {% if request.answered %}green{% else %}red{% endif %};">
+            <span class="glyphicon {% if request.answered %}glyphicon-thumbs-up{% else %}glyphicon-thumbs-down{% endif %}"></span>
+            <h4 style="display: inline;">{% if not request.answered %}Not {% endif %}Answered{% if not request.answered %}!</a>{% endif %}</h4>
+        </div>
+        
+        <div style="text-align: right; margin-right: .5em; font-style: italic;">Posted by <a href="profile?id={{request.user.id}}">{{ request.user.user.username }}</a> at  {{ request.date }}</div>
+    </div>
+    
+</div>

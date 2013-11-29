@@ -1,0 +1,94 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.validators import validate_email
+
+from django.core.urlresolvers import reverse
+
+# Decorator to use built-in authentication system
+from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.http import HttpResponse, Http404
+
+from mimetypes import guess_type
+
+# Used to create and manually log in a user
+from django.contrib.auth.models import User
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.tokens import default_token_generator
+
+from django.core.mail import send_mail
+
+from application.models import *
+from application.forms import *
+
+#def login(request):
+#    context= {}
+#    if request.method == 'GET':
+#        context['form'] = RegistrationForm() 
+#        return render(request, 'login.html', context)
+#    errors = []
+    
+    #authenticate user 
+#    username = request.POST['username']
+#    password = request.POST['password']
+#    user = authenticate(username=username, password=password)
+    
+#    if user is not None:
+#        django.contrib.auth.views.login(request,user)
+#        return redirect('/')
+    
+    #redirect user
+#    return render(request, 'home.html', context)
+
+
+def register(request):
+    context = {}
+    errors = []
+
+    #Registration form   
+    #form = RegistrationForm(request.POST)
+    #context['form'] = form
+
+    #form validation
+    #if not form.is_valid():
+        #return redirect('/')
+    
+    username = request.POST['username']
+    email = request.POST['email']
+    password1 = request.POST['password1']
+    password2 = request.POST['password2']
+    
+    if password1 and password2 and password1 != password2:
+        errors.append("error with passwords")
+        context['errors'] = errors
+        return render(request, 'login.html', context)
+    if User.objects.filter(username__exact=username):
+        errors.append("username already exists!")
+        context['errors'] = errors
+        return render(request, 'login.html', context)
+    
+    #Creating new User object
+    new_user = User.objects.create_user(username=username, \
+                                        password=password1)
+    new_user.save()
+    
+    user = authenticate(username=username, password=password1)
+    login(request, user)
+     
+    #Create AppUser obj for the new User
+    #TODO: Add more stuff to AppUser
+    new_app_user = AppUser(user = new_user)
+    new_app_user.save()
+    
+    return render(request, 'home.html', context)
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('/') 
+
+def view_profile(request):
+    return render()
+
+
+

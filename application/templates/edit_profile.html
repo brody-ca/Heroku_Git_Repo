@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% extends "base_template.html" %}
+
+{% block title %}Profile - Unbugger{% endblock title %}
+
+{% block top-nav %}
+{% with "profile" as whichactive %}
+    {% include "topnav_template.html" with active=whichactive %}
+{% endwith %}
+{% endblock top-nav %}
+
+{% block content %}
+{% load staticfiles %}
+Profile editing will be done with Javascript in sprint 2.
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 style="display: inline-block;">{{profileuser.user.username}}'s profile</h1>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <form enctype="multipart/form-data" action="/eprofile" method="post"> 
+            <div class="col-sm-3">
+                {% if profileuser.picture %}
+                <img style="width:100%;" src="{{profileuser.picture.url}}"> 
+                {% else %}
+                <img style="width:100%;" src={% static "images/profile.jpg" %}> 
+                {% endif %}
+                <input name="picture" type="file"/>
+                <h1 style="font-size:400%; text-align: center;">
+                    Points:
+                    <span class="points" style="font-size: 200%; vertical-align:middle;">{{profileuser.points}}</span>
+                </h1>
+            </div>
+           
+            <div class="col-sm-4">
+                <h2 style="display: inline; padding-top: 2em;">Reputation:</h2> <h2 style="display: inline; color: green;">
+                    +{{rep}}
+                </h2>
+                <h2>Education:</h2>
+                {% if profileuser.education %}
+                <ul style="font-size: 150%;">
+                    <li><input type="text" name="education" value="{{profileuser.education}}" /></li>
+                </ul>
+                {% else %}
+                <ul style="font-size: 150%;">
+                    <li><input type="text" name="education" placeholder="Enter Your Education."/></li>
+                </ul>
+                {% endif %}
+            </div>
+            
+            <div class="col-sm-5">
+                <h2>Career</h2>
+                {% if profileuser.career %}
+                <ul style="font-size: 150%;">
+                    <li><input type="text" name="career" value="{{profileuser.career}}" /></li>
+                </ul>
+                {% else %}
+                <ul style="font-size: 150%;">
+                    <li><input type="text" name="career" placeholder="Enter Your Career."/></li>
+                </ul>
+                {% endif %}
+
+                <h2>Expertise:</h2>
+                {% if tags %}
+                {% for tag in tags %}
+                <button type="button" class="btn btn-xs btn-danger">{{tag.text}}</button>
+                {% endfor %}
+                {% endif %}
+                <ul style="font-size: 150%;">
+                    <li><input type="text" name="expertise" placeholder="Add Your Expertise."/></li>
+                </ul>
+            </div>
+            <button type="submit" class="span3">Save Changes</button>
+            {% csrf_token %}
+            </form>
+            <a href="/change_password"><button class="span3">Change Password</button></a>
+        </div>
+        <!--
+        <h2>Recent responses:</h2>
+        <div class="request-response list-group" style="border: 1px solid grey; padding: 2em;">
+            <a href="view_request"><h1 style="display: inline; margin-top: 0px; font-weight: bold;">@Need help with things</h1></a>
+            <br /><br />
+            <div style="border: 1px solid grey; padding: 2em;">
+            <p>You should do this.</p>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Attached files</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                        <li>filebad.c</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="request-header" style="margin-top: 0px;">
+                    <div style="display: inline-block; float: right;">
+                        <div style="text-align: right;">Posted by Bob at 7:00:00 PM <b>(-9999)</b></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+    </div>
+</div>
+{% endblock content %}

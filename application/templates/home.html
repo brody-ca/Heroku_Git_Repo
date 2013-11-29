@@ -1,0 +1,67 @@
+{% extends "base_template.html" %}
+
+{% block title %}Home - Unbugger{% endblock title %}
+
+{% block top-nav %}
+{% with "home" as whichactive %}
+    {% include "topnav_template.html" with active=whichactive appuser=appuser %}
+{% endwith %}
+{% endblock top-nav %}
+        
+{% block content %}
+    
+{% load staticfiles %}
+<div class="col-md-3">
+<!-- sidebar -->
+    <div class="row">
+    <ul class="nav nav-pills nav-stacked list-group" style="text-align: center;">
+        {% if appuser %} 
+            {% if appuser.picture %}
+            <li class="list-group-item">
+                <img style="width:100%;" src="{{appuser.picture.url}}">
+            </li> 
+            {% else %}
+            <li class="list-group-item">
+                <img style="width:100%;" src="{% static "images/profile.jpg" %}">
+            </li>
+            {% endif %}
+        {% endif %}
+    </ul>
+
+    </div>
+    <div class="row">
+    <ul class="nav nav-pills nav-stacked list-group" style="text-align: center;">    
+        {% if sort == 'most_valuable' %}
+        <li class="list-group-item active"><a href="/home?sort=most_valuable">Most valuable</a></li>
+        {% else %}
+        <li class="list-group-item"><a href="/home?sort=most_valuable">Most valuable</a></li>
+        {% endif %}
+        {% if sort == 'popular' %}
+        <li class="list-group-item active"><a href="/home?sort=popular">Popular</a></li>
+        {% else %}
+        <li class="list-group-item"><a href="/home?sort=popular">Popular</a></li>
+        {% endif %}
+        {% if sort == 'unanswered' %}
+        <li class="list-group-item active"><a href="/home?sort=unanswered">Unanswered</a></li>
+        {% else %}
+        <li class="list-group-item"><a href="/home?sort=unanswered">Unanswered</a></li>
+        {% endif %}
+        {% if sort == 'newest' %} 
+        <li class="list-group-item active"><a href="/home?sort=newest">Newest</a></li>
+        {% else %}
+        <li class="list-group-item"><a href="/home?sort=newest">Newest</a></li>
+        {% endif %}
+        {% include "search_template.html" %}
+        <li class="list-group-item" style="margin-top: 2em; font-weight: bold;"><a href="/new_request">Submit a new request</a></li>
+    </ul>
+    </div>
+</div>
+<div class="col-md-9" style="margin-bottom: 2em;">
+{% if not request_list %}
+    No requests found.
+{% endif %}
+{% for request in request_list %}
+    {% include "request_summary_template.html" with request=request %}
+{% endfor %}
+</div>
+{% endblock content %}
